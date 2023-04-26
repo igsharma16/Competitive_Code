@@ -1,4 +1,7 @@
 import java.util.Scanner;
+
+import javax.swing.text.html.HTMLEditorKit.ParserCallback;
+
 import java.util.ArrayList;
 
 public class Knight{
@@ -7,6 +10,10 @@ public class Knight{
         Position p = new Position();
         p.get();
         p.display();
+
+        Move m = new Move(Point.K.getX() , Point.K.getY() , p.getN());
+        m.max();
+        m.display();
         
     }
     public static Scanner inp = new Scanner(System.in);
@@ -14,10 +21,10 @@ public class Knight{
 
 class Position{
     int N;
-    String q = "KP";
-    char Kch = q.charAt(0);
-    char Pch = q.charAt(1);
-    ArrayList<char[]> store = new ArrayList<char[]>();
+    static String q = "KP";
+    static char Kch = q.charAt(0);
+    static char Pch = q.charAt(1);
+    public static ArrayList<char[]> store = new ArrayList<char[]>();
     public static Point K;
         
     public Position(){
@@ -42,6 +49,10 @@ class Position{
         for(char[] e : store){
             System.out.println(e);
         }
+    }
+
+    public int getN(){
+        return N;
     }
         
 }
@@ -73,5 +84,57 @@ class Point{
         System.out.println(x + " " + y);    
     }
     
+}
+
+class Move{
+    
+ArrayList<Integer> a = new ArrayList<Integer>();
+
+
+public Move(int x , int y , int N){
+    
+    state(x + 1 , y + 2 , N);
+    state(x + 2 , y + 1 , N);
+    state(x + 1 , y - 2 , N);
+    state(x + 2 , y - 1 , N);  
+}
+
+
+
+int total = 0;
+    public void state(int x , int y , int N){
+
+            if(x >= N || y >= N){
+                a.add(total);
+                total--;
+                return;
+        }
+            
+        if(Position.store.get(y)[x] == Position.Pch){
+            total++;
+        }
+        
+                      
+        state(x + 1 , y + 2 , N);
+        state(x + 2 , y + 1 , N);
+        state(x + 1 , y - 2 , N);
+        state(x + 2 , y - 1 , N);     
+        
+        
+    }
+
+    int max = 0;
+    void display(){
+        System.out.println(max);
+    }
+
+    
+    void max(){
+        for(Integer b : a){
+            if(b > max){
+                max = b;
+            }
+        }
+    }
 }
 
